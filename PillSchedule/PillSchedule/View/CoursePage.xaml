@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:pillschedule="clr-namespace:PillSchedule" 
+             x:DataType="pillschedule:CourseViewModel"
+             x:Class="PillSchedule.CoursePage">
+
+    <ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Entry Placeholder="Введите название курса" Text="{Binding CourseName}" />
+
+                <Picker SelectedIndex="{Binding CourseType}" Title="Выберите тип лекарства">
+                    <Picker.Items>
+                        <x:String>Таблетка</x:String>
+                        <x:String>Капсула</x:String>
+                        <x:String>Капли</x:String>
+                        <x:String>Микстура</x:String>
+                        <x:String>Мазь</x:String>
+                        <x:String>Укол</x:String>
+                        <x:String>Процедура</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Начало приема: " VerticalOptions="CenterAndExpand"/>
+                    <DatePicker Date="{Binding CourseStartDate}" />
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Доза: " VerticalOptions="CenterAndExpand"/>
+                    <Entry x:Name="CourseDosageEntry" Text="{Binding CourseDosage}" 
+                           Placeholder="Введите колличество" Keyboard="Numeric"
+                           TextChanged="CourseDosageEntry_TextChanged">
+                    </Entry>
+                    <Picker SelectedIndex="{Binding CourseDosageType}">
+                        <Picker.Items>
+                            <x:String>шт</x:String>
+                            <x:String>мл</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </StackLayout>
+                <Label x:Name="CourseDosageEntryErrorMsg" IsVisible="False" 
+                       TextColor="Red" />
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Связь с едой" VerticalOptions="CenterAndExpand"/>
+                    <Picker SelectedIndex="{Binding CourseFoodDependence}">
+                        <Picker.Items>
+                            <x:String>Не связано</x:String>
+                            <x:String>До еды</x:String>
+                            <x:String>Во время еды</x:String>
+                            <x:String>После еды</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Принимать " VerticalOptions="CenterAndExpand"/>
+                    <Picker x:Name="CourseFreqTypePicker" SelectedIndex="{Binding CourseFreqType}" PropertyChanged="CourseFreqTypePicker_PropertyChanged">
+                        <Picker.Items>
+                            <x:String>каждый день</x:String>
+                            <x:String>через день</x:String>
+                        </Picker.Items>
+                    </Picker>
+                    <Entry Text="{Binding CourseFreq}" IsVisible="{Binding isCourseFreqEnable}" 
+                           Keyboard="Numeric" x:Name="CourseFreqEntry" TextChanged="CourseFreqEntry_TextChanged"/>
+                </StackLayout>
+                <Label x:Name="CourseFreqEntryErrorMsg" IsVisible="False" 
+                       TextColor="Red" />
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Длина курса " VerticalOptions="CenterAndExpand"/>
+                    <Entry x:Name="CourseDurationEntry" Text="{Binding CourseDuration}" 
+                           IsVisible="{Binding isCourseDurationEnable}" Keyboard="Numeric" WidthRequest="150"
+                           TextChanged="CourseDurationEntry_TextChanged"/>
+                    <Picker x:Name="CourseDurationTypePicker" SelectedIndex="{Binding CourseDurationType}"
+                            PropertyChanged="CourseDurationTypePicker_PropertyChanged">
+                        <Picker.Items>
+                            <x:String>бесконечна</x:String>
+                            <x:String>дней</x:String>
+                            <x:String>раз</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </StackLayout>
+                <Label x:Name="CourseDurationEntryErrorMsg" IsVisible="False" 
+                       TextColor="Red" />
+
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Количество приемов в день" VerticalOptions="CenterAndExpand"/>
+                    <Entry Text="{Binding CourseFreqInDay}" Keyboard="Numeric" WidthRequest="100"
+                           x:Name="CourseFreqInDayEntry" TextChanged="CourseFreqInDayEntry_TextChanged"/>
+                </StackLayout>
+                <Label x:Name="CourseFreqInDayEntryErrorMsg" IsVisible="False" 
+                       TextColor="Red" />
+
+                <CollectionView ItemsSource="{Binding CourseReceptionTime}"
+                        ItemsLayout="HorizontalList"
+                        HeightRequest="60">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate >
+                            <StackLayout x:DataType="pillschedule:TimePickerDate">
+                                <TimePicker Time="{Binding Time}" 
+                                            PropertyChanged="TimePicker_PropertyChanged"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label x:Name="CourseReceptionTimeErrorMsg" IsVisible="False" 
+                       TextColor="Red" />
+
+            </StackLayout>
+        </ScrollView>
+        <Button x:Name="SaveBtn" Text="Сохранить" Command="{Binding SaveCourseCommand}" 
+                VerticalOptions="EndAndExpand"/>
+    </StackLayout>
+
+</ContentPage>

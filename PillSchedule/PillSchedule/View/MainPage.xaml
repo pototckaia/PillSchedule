@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodel="clr-namespace:PillSchedule.ViewModel" 
+             xmlns:model="clr-namespace:PillSchedule"
+             x:Class="PillSchedule.MainPage">
+
+  <ContentPage Title="Приемы" />
+    
+    <ContentPage Title="Курсы" x:DataType="viewmodel:CoursesViewModel">
+        <CollectionView ItemsSource="{Binding Courses}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout x:DataType="model:Course" Padding="8">
+                      <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                        <Label Text="Название курса: " FontSize="Medium"/>
+                        <Label Text="{Binding Name}" FontSize="Medium"/>
+                      </StackLayout>
+                      <StackLayout Orientation="Horizontal">
+                        <Label Text="Начало приема: " VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                        <Label Text="{Binding StartDate, StringFormat='{0:MMMM d yyyy}'}" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                      </StackLayout>
+                      <StackLayout Orientation="Horizontal">
+                        <Label Text="Приемов в день" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                        <Label Text="{Binding FreqInDay}" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                      </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Принимать " VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                            <Label Text="{Binding FreqType}" VerticalOptions="CenterAndExpand" FontSize="Medium" x:Name="FreqTypeLabel">
+                              <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Everyday}">
+                                  <Setter Property="Text" Value="каждый день" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Nday}">
+                                  <Setter Property="Text" Value="через день" />
+                                </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Label Text="{Binding Freq}" FontSize="Medium">
+                              <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Everyday}">
+                                  <Setter Property="IsVisible" Value="false" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Nday}">
+                                  <Setter Property="IsVisible" Value="true" />
+                                </DataTrigger>
+                              </Label.Triggers>
+                            </Label>
+                        </StackLayout>
+                      <StackLayout Orientation="Horizontal">
+                            <Label Text="Длина курса " FontSize="Medium"/>
+                            <Label Text="{Binding Duration}" FontSize="Medium"></Label>
+                            <Label Text="{Binding DosageType}" FontSize="Medium"></Label>
+                            <!--<Picker x:Name="CourseDurationTypePicker" SelectedIndex="{Binding CourseDurationType}"
+                                PropertyChanged="CourseDurationTypePicker_PropertyChanged">
+                          <Picker.Items>
+                            <x:String>бесконечна</x:String>
+                            <x:String>дней</x:String>
+                            <x:String>раз</x:String>
+                          </Picker.Items>
+                        </Picker>-->
+                      </StackLayout>
+                        <BoxView HeightRequest="1" Color="Black" IsVisible="true"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ContentPage>
+
+</TabbedPage>
