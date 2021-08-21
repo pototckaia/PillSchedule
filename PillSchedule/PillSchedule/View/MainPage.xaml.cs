@@ -15,11 +15,16 @@ namespace PillSchedule
   {
 
     CoursesViewModel courses;
-    
+
     public MainPage()
     {
       InitializeComponent();
-      BindingContext = courses = new CoursesViewModel();
+      BindingContext = courses = new CoursesViewModel(Navigation);
+    }
+
+    protected override void OnAppearing()
+    {
+      courses.OnAppearing();
     }
   }
 }

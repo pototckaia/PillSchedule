@@ -5,66 +5,95 @@
              xmlns:model="clr-namespace:PillSchedule"
              x:Class="PillSchedule.MainPage">
 
-  <ContentPage Title="Приемы" />
-    
+    <ContentPage Title="Приемы" />
+
     <ContentPage Title="Курсы" x:DataType="viewmodel:CoursesViewModel">
-        <CollectionView ItemsSource="{Binding Courses}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout x:DataType="model:Course" Padding="8">
-                      <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                        <Label Text="Название курса: " FontSize="Medium"/>
-                        <Label Text="{Binding Name}" FontSize="Medium"/>
-                      </StackLayout>
-                      <StackLayout Orientation="Horizontal">
-                        <Label Text="Начало приема: " VerticalOptions="CenterAndExpand" FontSize="Medium"/>
-                        <Label Text="{Binding StartDate, StringFormat='{0:MMMM d yyyy}'}" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
-                      </StackLayout>
-                      <StackLayout Orientation="Horizontal">
-                        <Label Text="Приемов в день" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
-                        <Label Text="{Binding FreqInDay}" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
-                      </StackLayout>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Принимать " VerticalOptions="CenterAndExpand" FontSize="Medium"/>
-                            <Label Text="{Binding FreqType}" VerticalOptions="CenterAndExpand" FontSize="Medium" x:Name="FreqTypeLabel">
-                              <Label.Triggers>
-                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Everyday}">
-                                  <Setter Property="Text" Value="каждый день" />
-                                </DataTrigger>
-                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Nday}">
-                                  <Setter Property="Text" Value="через день" />
-                                </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Label Text="{Binding Freq}" FontSize="Medium">
-                              <Label.Triggers>
-                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Everyday}">
-                                  <Setter Property="IsVisible" Value="false" />
-                                </DataTrigger>
-                                <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Nday}">
-                                  <Setter Property="IsVisible" Value="true" />
-                                </DataTrigger>
-                              </Label.Triggers>
-                            </Label>
-                        </StackLayout>
-                      <StackLayout Orientation="Horizontal">
-                            <Label Text="Длина курса " FontSize="Medium"/>
-                            <Label Text="{Binding Duration}" FontSize="Medium"></Label>
-                            <Label Text="{Binding DosageType}" FontSize="Medium"></Label>
-                            <!--<Picker x:Name="CourseDurationTypePicker" SelectedIndex="{Binding CourseDurationType}"
-                                PropertyChanged="CourseDurationTypePicker_PropertyChanged">
-                          <Picker.Items>
-                            <x:String>бесконечна</x:String>
-                            <x:String>дней</x:String>
-                            <x:String>раз</x:String>
-                          </Picker.Items>
-                        </Picker>-->
-                      </StackLayout>
-                        <BoxView HeightRequest="1" Color="Black" IsVisible="true"/>
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <RefreshView IsRefreshing="{Binding IsRefreshingCourses}"
+                   Command="{Binding RefreshCoursesCommand}">
+            <StackLayout Orientation="Vertical">
+                <CollectionView ItemsSource="{Binding Courses}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout x:DataType="model:Course" Padding="8">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                    <Label Text="Название курса: " FontSize="Medium"/>
+                                    <Label Text="{Binding Name}" FontSize="Medium"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Начало приема: " VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                                    <Label Text="{Binding StartDate, StringFormat='{0:MMMM d yyyy}'}" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Приемов в день" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                                    <Label Text="{Binding FreqInDay}" VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Принимать " VerticalOptions="CenterAndExpand" FontSize="Medium"/>
+                                    <Label Text="{Binding FreqType}" VerticalOptions="CenterAndExpand" FontSize="Medium" x:Name="FreqTypeLabel">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Everyday}">
+                                                <Setter Property="Text" Value="каждый день" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Nday}">
+                                                <Setter Property="Text" Value="через день" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label Text="{Binding Freq}" FontSize="Medium">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Everyday}">
+                                                <Setter Property="IsVisible" Value="false" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding FreqType}" Value="{x:Static model:eCourseFreqType.Nday}">
+                                                <Setter Property="IsVisible" Value="true" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Длина курса " FontSize="Medium"/>
+                                    <Label Text="{Binding Duration}" FontSize="Medium">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding DurationType}" Value="{x:Static model:eCourseDurationType.Regular}">
+                                                <Setter Property="IsVisible" Value="false" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding DurationType}" Value="{x:Static model:eCourseDurationType.Days}">
+                                                <Setter Property="IsVisible" Value="true" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding DurationType}" Value="{x:Static model:eCourseDurationType.Receptions}">
+                                                <Setter Property="IsVisible" Value="true" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label Text="{Binding DurationType}" VerticalOptions="CenterAndExpand" FontSize="Medium">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding DurationType}" Value="{x:Static model:eCourseDurationType.Regular}">
+                                                <Setter Property="Text" Value="бесконечна" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding DurationType}" Value="{x:Static model:eCourseDurationType.Days}">
+                                                <Setter Property="Text" Value="дней" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding DurationType}" Value="{x:Static model:eCourseDurationType.Receptions}">
+                                                <Setter Property="Text" Value="раз" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+                                <BoxView HeightRequest="1" Color="Black" IsVisible="true"/>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                    NumberOfTapsRequired="1"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CoursesViewModel}}, Path=TapCourseCommand}"		
+                                    CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button x:Name="CreateCourse" Text="Добавить курс" HorizontalOptions="FillAndExpand" Command="{Binding CreateCourseCommand}" />
+            </StackLayout>
+        </RefreshView>
     </ContentPage>
 
 </TabbedPage>

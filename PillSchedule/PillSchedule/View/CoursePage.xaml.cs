@@ -12,10 +12,10 @@ namespace PillSchedule
   {
     CourseViewModel viewModel;
 
-    public CoursePage()
+    public CoursePage(Course course = null)
     {
       InitializeComponent();
-      BindingContext = viewModel = new CourseViewModel();
+      BindingContext = viewModel = new CourseViewModel(Navigation, course);
 
       if (viewModel.isEditMode)
       {

@@ -40,17 +40,17 @@ namespace PillSchedule
 
     public int CreateCourse(Course course, List<TimeSpan> receptions)
     {
-      var id = db.Insert(course);
+      db.Insert(course);
       foreach (var r in receptions)
       {
         db.Insert(new Reception
         {
           Id = 0,
-          CourseId = id,
+          CourseId = course.Id,
           Time = r
         });
       }
-      return id;
+      return course.Id;
     }
 
     public void UpdateCourse(Course course, List<TimeSpan> receptions)

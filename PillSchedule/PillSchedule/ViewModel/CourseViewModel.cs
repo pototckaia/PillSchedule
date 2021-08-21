@@ -35,14 +35,18 @@ namespace PillSchedule
     private bool _isCreateMode;
     private bool _isCourseFreqEnable;
     private bool _isCourseDurationEnable;
+    private bool _isLockCommand;
     private Dictionary<string, string> _validationErrors;
+    private INavigation _navigation;
 
-    public CourseViewModel(Course course = null)
+    public CourseViewModel(INavigation navigation, Course course = null)
     {
       SaveCourseCommand = new Command(onSaveCourse);
       DeleteCourseCommand = new Command(onDeleteCourse);
       _validationErrors = new Dictionary<string, string>();
       _receptionTime = new ObservableCollection<TimePickerDate>();
+      _isLockCommand = false;
+      _navigation = navigation;
 
       var times = new List<TimeSpan>();
       if (course != null)
@@ -395,8 +399,14 @@ namespace PillSchedule
 
     private void onSaveCourse()
     {
+      if (_isLockCommand)
+      {
+        return;
+      }
+
       if (isValidCourse())
       {
+        _isLockCommand = true;
         var db = CoursesDatabase.Instance;
         if (isCreateMode)
         {
@@ -406,17 +416,22 @@ namespace PillSchedule
         {
           db.UpdateCourse(_course, ReceptionTimeList);
         }
-        // await Shell.Current.GoToAsync("../..");
-        // await ParentPage.Navigation.PopModalAsync();
+        _navigation.PopAsync();
       }
     }
 
     private void onDeleteCourse()
     {
-      if (isCreateMode)
+      if (_isLockCommand)
       {
+        return;
+      }
+
+      if (!isCreateMode)
+      {
+        _isLockCommand = true;
         CoursesDatabase.Instance.DeleteCourse(_course.Id);
-        //await Shell.Current.GoToAsync("../..");
+        _navigation.PopAsync();
       }
     }
 
