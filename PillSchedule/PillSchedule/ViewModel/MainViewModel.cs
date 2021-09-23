@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace PillSchedule.ViewModel
 {
-  class CoursesViewModel : INotifyPropertyChanged
+  class MainViewModel : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler PropertyChanged;
     public ObservableCollection<Course> Courses { get; }
@@ -19,7 +19,7 @@ namespace PillSchedule.ViewModel
     private INavigation _navigation;
     private bool _isRefreshingCourses = false;
 
-    public CoursesViewModel(INavigation navigation)
+    public MainViewModel(INavigation navigation)
     {
       Courses = new ObservableCollection<Course>();
       TapCourseCommand = new Command<Course>(onTapCourse);

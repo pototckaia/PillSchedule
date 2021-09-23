@@ -14,17 +14,17 @@ namespace PillSchedule
   public partial class MainPage : TabbedPage
   {
 
-    CoursesViewModel courses;
+    MainViewModel vm;
 
     public MainPage()
     {
       InitializeComponent();
-      BindingContext = courses = new CoursesViewModel(Navigation);
+      BindingContext = vm = new MainViewModel(Navigation);
     }
 
     protected override void OnAppearing()
     {
-      courses.OnAppearing();
+      vm.OnAppearing();
     }
   }
 }

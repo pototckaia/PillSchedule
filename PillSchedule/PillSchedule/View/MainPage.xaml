@@ -7,10 +7,10 @@
 
     <ContentPage Title="Приемы" />
 
-    <ContentPage Title="Курсы" x:DataType="viewmodel:CoursesViewModel">
+    <ContentPage Title="Курсы" x:DataType="viewmodel:MainViewModel">
         <RefreshView IsRefreshing="{Binding IsRefreshingCourses}"
                    Command="{Binding RefreshCoursesCommand}">
-            <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Vertical" >
                 <CollectionView ItemsSource="{Binding Courses}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -83,7 +83,7 @@
                                 <StackLayout.GestureRecognizers>
                                     <TapGestureRecognizer 
                                     NumberOfTapsRequired="1"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CoursesViewModel}}, Path=TapCourseCommand}"		
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapCourseCommand}"		
                                     CommandParameter="{Binding .}">
                                     </TapGestureRecognizer>
                                 </StackLayout.GestureRecognizers>
