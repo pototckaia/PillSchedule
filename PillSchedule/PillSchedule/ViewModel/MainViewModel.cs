@@ -12,33 +12,43 @@ namespace PillSchedule.ViewModel
   {
     public event PropertyChangedEventHandler PropertyChanged;
     public ObservableCollection<Course> Courses { get; }
+    public ObservableCollection<CourseInstance> CoursesInstance { get; }
     public Command CreateCourseCommand { get; set; }
     public Command<Course> TapCourseCommand { get; set; }
-    public Command RefreshCoursesCommand { get; set; }
 
     private INavigation _navigation;
-    private bool _isRefreshingCourses = false;
+    private bool _isRefreshingСontent = false;
+    private DateTime _selectedData = DateTime.Now;
 
     public MainViewModel(INavigation navigation)
     {
       Courses = new ObservableCollection<Course>();
+      CoursesInstance = new ObservableCollection<CourseInstance>();
       TapCourseCommand = new Command<Course>(onTapCourse);
       CreateCourseCommand = new Command(onCreateCourse);
-      RefreshCoursesCommand = new Command(onRefreshCourses);
       _navigation = navigation;
       LoadCourses();
+      LoadCourseInstance();
     }
 
-    public bool IsRefreshingCourses
+    public void OnAppearing()
     {
-      get => _isRefreshingCourses;
+      if (_isRefreshingСontent)
+      {
+        _isRefreshingСontent = false;
+        LoadCourses();
+        LoadCourseInstance();
+      }
+    }
+
+    public DateTime SelectedDate
+    {
+      get => _selectedData;
       set
       {
-        if (value != _isRefreshingCourses)
-        {
-          _isRefreshingCourses = value;
-          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRefreshingCourses"));
-        }
+        _selectedData = value;
+        LoadCourseInstance();
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedDate"));
       }
     }
 
@@ -51,8 +61,18 @@ namespace PillSchedule.ViewModel
       }
     }
 
+    private void LoadCourseInstance()
+    {
+      CoursesInstance.Clear();
+      foreach (var courseInstance in CoursesDatabase.Instance.GetCourseInstance(SelectedDate))
+      {
+        CoursesInstance.Add(courseInstance);
+      }
+    }
+
     private void onCreateCourse()
     {
+      _isRefreshingСontent = true;
       _navigation.PushAsync(new CoursePage());
     }
 
@@ -60,21 +80,9 @@ namespace PillSchedule.ViewModel
     {
       if (course != null)
       {
+        _isRefreshingСontent = true;
         _navigation.PushAsync(new CoursePage(course));
       }
-    }
-
-    private void onRefreshCourses()
-    {
-      LoadCourses();
-      IsRefreshingCourses = false;
-    }
-
-    public void OnAppearing()
-    {
-      IsRefreshingCourses = true;
-      LoadCourses();
-      IsRefreshingCourses = false;
     }
   }
 }

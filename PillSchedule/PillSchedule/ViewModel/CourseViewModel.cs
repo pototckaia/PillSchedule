@@ -52,7 +52,7 @@ namespace PillSchedule
       if (course != null)
       {
         _course = course;
-        times = CoursesDatabase.Instance.GetCourseReceptions(course.Id);
+        times = CoursesDatabase.Instance.GetCourseReceptionsTimeSpan(course.Id);
       }
       else
       {
