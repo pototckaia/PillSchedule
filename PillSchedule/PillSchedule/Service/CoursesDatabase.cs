@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Collections.Generic;
 using SQLite;
 
@@ -36,6 +36,7 @@ namespace PillSchedule
         {
             db.CreateTable<Course>();
             db.CreateTable<Reception>();
+            db.CreateTable<Notification>();
         }
 
         public int CreateCourse(Course course, List<TimeSpan> receptions)
@@ -70,8 +71,8 @@ namespace PillSchedule
 
         public void DeleteCourse(int id)
         {
-            db.Delete<Course>(id);
             db.Table<Reception>().Where(x => x.CourseId == id).Delete();
+            db.Delete<Course>(id);
         }
 
         public Course GetCourse(int id)
@@ -108,7 +109,7 @@ namespace PillSchedule
             foreach (var course in courses)
             {
                 bool courseTakeInDay = false;
-                int daysPassed = (int)Math.Round((d - course.StartDate).TotalDays);
+                int daysPassed = (int)Math.Round((d - course.StartDate.Date).TotalDays);
                 switch (course.FreqType)
                 {
                     case eCourseFreqType.Everyday:
@@ -137,7 +138,7 @@ namespace PillSchedule
 
                 if (courseTakeInDay)
                 {
-                    var receptions = GetCourseReceptions(course.Id);
+                    var receptions = GetCourseReceptions(course.Id).OrderBy(r => r.Time).ToList();
                     var requiredRecipes = course.Duration - daysPassed * course.FreqInDay;
                     foreach (var r in receptions)
                     {
@@ -161,6 +162,32 @@ namespace PillSchedule
                 }
             }
             return courseInstance;
+        }
+
+        public int CreateNotification(Notification notification)
+        {
+            db.Insert(notification);
+            return notification.Id;
+        }
+
+        public void UpdateNotification(Notification notification)
+        {
+            db.Update(notification);
+        }
+
+        public void DeleteNotification(int id)
+        {
+            db.Delete<Notification>(id);
+        }
+
+        public Notification GetNotification(int notificationnId)
+        {
+            return db.Get<Notification>(notificationnId);
+        }
+
+        public Notification GetNotificationByCourseId(int courseId)
+        {
+            return db.Get<Notification>(notification => notification.CourseId == courseId);
         }
     }
 }

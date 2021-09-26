@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 using System.Linq;
+using PillSchedule.Service;
 
 namespace PillSchedule
 {
@@ -347,7 +348,7 @@ namespace PillSchedule
             {
                 if (!value.Equals(_course.StartDate))
                 {
-                    _course.StartDate = value;
+                    _course.StartDate = value.Date;
                     OnPropertyChanged();
                 }
             }
@@ -411,10 +412,12 @@ namespace PillSchedule
                 if (isCreateMode)
                 {
                     db.CreateCourse(_course, ReceptionTimeList);
+                    NotificationSystem.Instance.onCreateCourse(_course, ReceptionTimeList);
                 }
                 else
                 {
                     db.UpdateCourse(_course, ReceptionTimeList);
+                    NotificationSystem.Instance.onUpdateCourse(_course, ReceptionTimeList);
                 }
                 _navigation.PopAsync();
             }
@@ -430,6 +433,7 @@ namespace PillSchedule
             if (!isCreateMode)
             {
                 _isLockCommand = true;
+                NotificationSystem.Instance.onDeleteCourse(_course.Id);
                 CoursesDatabase.Instance.DeleteCourse(_course.Id);
                 _navigation.PopAsync();
             }
