@@ -10,21 +10,21 @@ using PillSchedule.ViewModel;
 
 namespace PillSchedule
 {
-  [XamlCompilation(XamlCompilationOptions.Compile)]
-  public partial class MainPage : TabbedPage
-  {
-
-    MainViewModel vm;
-
-    public MainPage()
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MainPage : TabbedPage
     {
-      InitializeComponent();
-      BindingContext = vm = new MainViewModel(Navigation);
-    }
 
-    protected override void OnAppearing()
-    {
-      vm.OnAppearing();
+        MainViewModel vm;
+
+        public MainPage()
+        {
+            InitializeComponent();
+            BindingContext = vm = new MainViewModel(Navigation);
+        }
+
+        protected override void OnAppearing()
+        {
+            vm.OnAppearing();
+        }
     }
-  }
 }

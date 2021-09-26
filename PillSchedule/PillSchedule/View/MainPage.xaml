@@ -88,7 +88,7 @@
     </ContentPage>
 
     <ContentPage Title="Курсы" x:DataType="viewmodel:MainViewModel">
-      <StackLayout Orientation="Vertical" >
+        <StackLayout Orientation="Vertical" >
             <CollectionView ItemsSource="{Binding Courses}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
