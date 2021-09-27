@@ -72,7 +72,7 @@ namespace PillSchedule.Page
             DescriptionLabel.Text = descriptionText;
 
             var dateFormate = _notification.Date.ToString("dd-MMM-yy");
-            var timeFormate = _notification.Time.ToString("hh:mm");
+            var timeFormate = _notification.Time.ToString("hh\\:mm");
             DateLabel.Text = $"Время: {dateFormate} {timeFormate}";
         }
 
